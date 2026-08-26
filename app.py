@@ -19,7 +19,7 @@ TOKEN = os.environ.get("TELEGRAM_TOKEN")
 if not TOKEN:
     raise ValueError("❌ Ошибка: переменная TELEGRAM_TOKEN не установлена!")
 
-ADMIN_IDS = [866350593]  # Ваш Telegram ID
+ADMIN_IDS = [866350593]
 DB_NAME = "/data/diagnostics.db"
 
 # Включим логирование для отладки

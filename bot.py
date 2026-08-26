@@ -8,7 +8,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 # 1. КОНФИГУРАЦИЯ
 # ======================================================
 
-TOKEN = "8983258137:AAEIobVNJx1olIDfG_CmvrAOQNV9sgMSglw" 
+TOKEN = "8983258137:AAF-IOS0egl8GZ34Xaf1MFF9gszVDcVkpbg" 
 ADMIN_IDS = [866350593] 
 DB_NAME = "diagnostics.db"
 

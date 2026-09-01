@@ -496,7 +496,7 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если захочешь посмотреть на ситуацию со стороны — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree"),]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")],
             [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     
@@ -512,7 +512,7 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если откликается — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree"),]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")],
             [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     

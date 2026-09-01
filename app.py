@@ -496,7 +496,8 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если захочешь посмотреть на ситуацию со стороны — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")],
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     
     elif category == "stagnation":
@@ -511,7 +512,8 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если откликается — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")],
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     
     else:  # crisis
@@ -526,7 +528,8 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если готов(а) разбираться — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")],
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     
     await query.edit_message_text(

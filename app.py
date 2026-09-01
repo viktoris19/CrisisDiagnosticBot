@@ -20,7 +20,7 @@ if not TOKEN:
     raise ValueError("❌ Ошибка: переменная TELEGRAM_TOKEN не установлена!")
 
 ADMIN_IDS = [866350593]
-DB_NAME = "/data/diagnostics.db"
+DB_NAME = "diagnostics.db"
 
 # Включим логирование для отладки
 logging.basicConfig(
@@ -496,7 +496,8 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если захочешь посмотреть на ситуацию со стороны — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree"),]
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/https://t.me/anna_kuuz")]
         ]
     
     elif category == "stagnation":
@@ -511,7 +512,8 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если откликается — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree"),]
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/https://t.me/anna_kuuz")]
         ]
     
     else:  # crisis
@@ -526,7 +528,8 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если готов(а) разбираться — напиши «стратегия»."
         )
         keyboard = [
-            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")]
+            [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree")],
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     
     await query.edit_message_text(
@@ -720,7 +723,7 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     
     # Получаем список ВСЕХ пользователей (кто нажал /start)
-    all_users = get_all_users()
+    all_users = get_all_users()  # Изменено с get_completed_users()
     
     if not all_users:
         await update.message.reply_text("📭 Нет пользователей для рассылки.")
@@ -820,5 +823,5 @@ if __name__ == "__main__":
     logger.info("🌐 Flask-сервер запускается...")
     
     # Запускаем Flask-сервер
-    port = int(os.environ.get("PORT", 80))
+    port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port, debug=False)

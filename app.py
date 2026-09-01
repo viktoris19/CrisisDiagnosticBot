@@ -697,6 +697,63 @@ async def export(update: Update, context: ContextTypes.DEFAULT_TYPE):
         caption="📊 Экспорт данных диагностики"
     )
 
+async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Отправляет текстовое сообщение всем пользователям (включая не завершивших опрос)."""
+    user_id = update.effective_user.id
+    
+    if user_id not in ADMIN_IDS:
+        await update.message.reply_text("⛔ У вас нет доступа к этой команде.")
+        return
+    
+    # Получаем текст сообщения (всё, что после /broadcast)
+    message_text = " ".join(context.args)
+    
+    # Если нет текста — показываем инструкцию
+    if not message_text:
+        await update.message.reply_text(
+            "📢 **Как сделать рассылку:**\n\n"
+            "Напишите: `/broadcast Ваше сообщение`\n\n"
+            "Пример: `/broadcast Привет! У нас новый вебинар. Запись по ссылке: ...`\n\n"
+            "⚠️ Сообщение получат **все пользователи**, кто начал опрос (включая не завершивших).",
+            parse_mode="Markdown"
+        )
+        return
+    
+    # Получаем список ВСЕХ пользователей (кто нажал /start)
+    all_users = get_all_users()
+    
+    if not all_users:
+        await update.message.reply_text("📭 Нет пользователей для рассылки.")
+        return
+    
+    sent = 0
+    failed = 0
+    
+    # Отправляем сообщение каждому
+    for user in all_users:
+        user_id = user[0]  # user_id из базы
+        
+        try:
+            await context.bot.send_message(
+                chat_id=user_id,
+                text=f"📢 {message_text}",
+                parse_mode="Markdown"
+            )
+            sent += 1
+        except Exception as e:
+            logger.error(f"Не удалось отправить сообщение пользователю {user_id}: {e}")
+            failed += 1
+        
+        # Небольшая пауза, чтобы не перегрузить бота
+        await asyncio.sleep(0.1)
+    
+    await update.message.reply_text(
+        f"✅ **Рассылка завершена!**\n\n"
+        f"📨 Отправлено: {sent}\n"
+        f"❌ Ошибок: {failed}",
+        parse_mode="Markdown"
+    )
+
 # ======================================================
 # 7. ЗАПУСК БОТА В ОТДЕЛЬНОМ ПОТОКЕ
 # ======================================================
@@ -716,6 +773,7 @@ async def run_bot():
     application.add_handler(CommandHandler("completed", completed))
     application.add_handler(CommandHandler("uncompleted", uncompleted))
     application.add_handler(CommandHandler("export", export))
+    application.add_handler(CommandHandler("broadcast", broadcast))
     
     # Регистрируем обработчик кнопок
     application.add_handler(CallbackQueryHandler(button_handler))

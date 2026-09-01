@@ -20,7 +20,7 @@ if not TOKEN:
     raise ValueError("❌ Ошибка: переменная TELEGRAM_TOKEN не установлена!")
 
 ADMIN_IDS = [866350593]
-DB_NAME = "diagnostics.db"
+DB_NAME = "/data/diagnostics.db"
 
 # Включим логирование для отладки
 logging.basicConfig(

@@ -497,7 +497,7 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         keyboard = [
             [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree"),]
-            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/https://t.me/anna_kuuz")]
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     
     elif category == "stagnation":
@@ -513,7 +513,7 @@ async def show_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         keyboard = [
             [InlineKeyboardButton("📩 Написать «стратегия»", url="https://t.me/annbefree"),]
-            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/https://t.me/anna_kuuz")]
+            [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/anna_kuuz")]
         ]
     
     else:  # crisis

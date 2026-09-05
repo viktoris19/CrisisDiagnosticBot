@@ -273,6 +273,13 @@ def get_q6_keyboard():
     ]
     return InlineKeyboardMarkup(keyboard)
 
+def get_broadcast_keyboard():
+    """Кнопка для рассылки"""
+    keyboard = [
+        [InlineKeyboardButton("🤍 Хочу", callback_data="broadcast_yes")]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
 # ======================================================
 # 4. ОБРАБОТЧИКИ КОМАНД И КНОПОК
 # ======================================================
@@ -405,6 +412,27 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_data[user_id]["q6"] = data.replace("q6_", "")
         update_user_step(user_id, 99)
         await show_result(update, context)
+
+# ----- КНОПКА ИЗ РАССЫЛКИ -----
+    elif data == "broadcast_yes":
+        user_id = update.effective_user.id
+        log_action(user_id, "broadcast_yes")
+    
+    # Второе сообщение с деталями
+        await query.edit_message_text(
+        "Супер 🤍 Тогда жду тебя!\n\n"
+        "📅 Когда: четверг, 10 сентября в 18:00 мск\n"
+        "📍 Где: Zoom\n\n"
+        "🔗 Ссылка для подключения:\n"
+        "https://us06web.zoom.us/j/1234567890\n\n"
+        "Можно прийти со своей конкретной ситуацией - например:\n"
+        "«Я больше не хочу работать там, где работаю, но не понимаю, куда идти»\n"
+        "или\n"
+        "«Я понимаю, чего хочу, но никак не решаюсь сделать переход».\n\n"
+        "Будем разбирать именно такие живые запросы.\n\n"
+        "До встречи 🤍",
+        parse_mode=None
+    )
 
 # ======================================================
 # 5. ЛОГИКА ОПРЕДЕЛЕНИЯ РЕЗУЛЬТАТА
@@ -749,13 +777,50 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Небольшая пауза, чтобы не перегрузить бота
         await asyncio.sleep(0.1)
+
+async def invite_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Отправляет готовое приглашение с кнопкой всем пользователям."""
+    user_id = update.effective_user.id
     
-    await update.message.reply_text(
-        f"✅ **Рассылка завершена!**\n\n"
-        f"📨 Отправлено: {sent}\n"
-        f"❌ Ошибок: {failed}",
-        parse_mode="Markdown"
+    if user_id not in ADMIN_IDS:
+        await update.message.reply_text("⛔ У вас нет доступа к этой команде.")
+        return
+    
+    all_users = get_all_users()
+    
+    if not all_users:
+        await update.message.reply_text("📭 Нет пользователей для рассылки.")
+        return
+    
+    text = (
+        "Привет! 👋\n\n"
+        "Ты недавно проходила у меня диагностику про работу и карьеру.\n\n"
+        "И я решила позвать тебя на небольшой бесплатный разбор в Zoom - для тех, кто сейчас чувствует, что по-старому уже не хочется, а куда двигаться дальше - пока непонятно.\n\n"
+        "Без вебинара, презентаций и мотивационных речей 😄\n\n"
+        "Просто разберём твою ситуацию: что сейчас не устраивает, чего хочется вместо этого и что мешает сделать следующий шаг.\n\n"
+        "Если тебе откликается - напиши мне «хочу».\n\n"
+        "Пришлю дату и ссылку 🤍"
     )
+    
+    sent = 0
+    failed = 0
+    
+    for user in all_users:
+        user_id = user[0]
+        
+        try:
+            await context.bot.send_message(
+                chat_id=user_id,
+                text=text,
+                parse_mode=None,
+                reply_markup=get_broadcast_keyboard()
+            )
+            sent += 1
+        except Exception as e:
+            logger.error(f"Не удалось отправить сообщение пользователю {user_id}: {e}")
+            failed += 1
+        
+        await asyncio.sleep(0.1)
 
 # ======================================================
 # 7. ЗАПУСК БОТА В ОТДЕЛЬНОМ ПОТОКЕ
@@ -777,6 +842,7 @@ async def run_bot():
     application.add_handler(CommandHandler("uncompleted", uncompleted))
     application.add_handler(CommandHandler("export", export))
     application.add_handler(CommandHandler("broadcast", broadcast))
+    application.add_handler(CommandHandler("invite", invite_all))
     
     # Регистрируем обработчик кнопок
     application.add_handler(CallbackQueryHandler(button_handler))
